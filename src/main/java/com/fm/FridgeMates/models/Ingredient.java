@@ -68,4 +68,14 @@ public class Ingredient {
     public void setRefrigerator(Refrigerator refrigerator) {
         this.refrigerator = refrigerator;
     }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "ingredientName='" + ingredientName + '\'' +
+                ", description='" + description + '\'' +
+                ", dateAdded=" + dateAdded +
+                ", refrigerator=" + refrigerator +
+                '}';
+    }
 }
