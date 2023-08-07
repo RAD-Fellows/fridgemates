@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,7 +9,15 @@
     <title>Home Page</title>
 </head>
 <body>
-<div th:if="{browsignUser == null}" th:replace="fragments/nav-header-unauthorized"></div>
+<div sec:authorize="isAnonymous()">
+    <!-- This part will be shown for anonymous users -->
+    <div th:replace="fragments/nav-header-unauthorized"></div>
+</div>
+<div sec:authorize="isAuthenticated()">
+    <!-- This part will be shown for authenticated users -->
+    <div th:replace="fragments/nav-header-authorized"></div>
+</div>
+
 
 <div class="container text-center">
     <h1>Home Page</h1>
