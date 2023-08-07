@@ -1,7 +1,9 @@
 package com.fm.FridgeMates.controllers;
 
 import com.fm.FridgeMates.models.ApplicationUser;
+import com.fm.FridgeMates.models.Refrigerator;
 import com.fm.FridgeMates.repositories.ApplicationUserRepository;
+import com.fm.FridgeMates.repositories.RefrigeratorRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import java.util.List;
 public class AppUserController {
     @Autowired
     ApplicationUserRepository applicationUserRepository;
+    @Autowired
+    RefrigeratorRepository refrigeratorRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
@@ -68,8 +72,14 @@ public class AppUserController {
                                    String address, String city, String state, Integer zip,
                                    String username, String password, String imgUrl){
         String encryptedPassword=passwordEncoder.encode(password);
+
+        Refrigerator newRefrigerator = new Refrigerator();
+        refrigeratorRepository.save(newRefrigerator);
+
         ApplicationUser user = new ApplicationUser(username, encryptedPassword, firstName, lastName, dateOfBirth, address, city, state, zip, imgUrl);
+        user.setRefrigerator(newRefrigerator);
         applicationUserRepository.save(user);
+
         return new RedirectView ("/");
     }
 

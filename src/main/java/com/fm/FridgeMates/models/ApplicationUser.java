@@ -24,6 +24,10 @@ public class ApplicationUser implements UserDetails {
     Integer zip;
     String imgUrl;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "refrigerator_id")
+    Refrigerator refrigerator;
+
     public ApplicationUser(String username, String password, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip, String imgUrl) {
         this.username = username;
         this.password = password;
@@ -129,6 +133,14 @@ public class ApplicationUser implements UserDetails {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
+    }
+
+    public void setRefrigerator(Refrigerator refrigerator) {
+        this.refrigerator = refrigerator;
     }
 
     @Override
