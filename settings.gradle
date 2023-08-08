@@ -1,1 +1,3 @@
-rootProject.name = 'FridgeMates'
+rootProject.name = 'fridgemates'
+include ':fridgemates'
+
