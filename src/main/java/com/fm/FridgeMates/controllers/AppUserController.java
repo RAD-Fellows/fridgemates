@@ -30,6 +30,12 @@ public class AppUserController {
     @Autowired
     HttpServletRequest request;
 
+    @GetMapping("/admin")
+    public String getAdminPanel(Model model) {
+        List<ApplicationUser> users = applicationUserRepository.findAll();
+        model.addAttribute("users", users);
+        return "admin";
+    }
 
     @GetMapping("/login")
     public String getLoginPage() { return "login";}
@@ -63,6 +69,12 @@ public class AppUserController {
         }
 
         return "index";
+    }
+
+    @PostMapping("/delete")
+    public RedirectView deleteUser(@RequestParam Long userId) {
+        applicationUserRepository.deleteById(userId);
+        return new RedirectView("/admin");
     }
 
     @PostMapping("/signup")
