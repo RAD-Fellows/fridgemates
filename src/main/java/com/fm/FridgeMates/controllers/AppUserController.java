@@ -113,6 +113,24 @@ public class AppUserController {
         return new RedirectView("/myprofile");
     }
 
+    @GetMapping("/users")
+    public String getAllUsers(Model m, Principal p){
+        if (p != null){
+            String username = p.getName();
+            ApplicationUser currentUser = applicationUserRepository.findByUsername(username);
+            m.addAttribute("browsingUser", currentUser);
+
+            List<ApplicationUser> usersInSameCity = applicationUserRepository.findByCityAndIdNot(currentUser.getCity(), currentUser.getId());
+            for (ApplicationUser user : usersInSameCity) {
+                System.out.println(user.getUsername() + user.getCity());
+            }
+
+            m.addAttribute("users", usersInSameCity);
+            return "user-search.html";
+        }
+        return "index.html";
+    }
+
 
     public void authWithHttpServletRequest(String username, String password){
         try {
