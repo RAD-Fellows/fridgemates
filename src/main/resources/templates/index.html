@@ -10,11 +10,10 @@
 </head>
 <body>
 <div sec:authorize="isAnonymous()">
-    <!-- This part will be shown for anonymous users -->
     <div th:replace="fragments/nav-header-unauthorized"></div>
 </div>
 <div sec:authorize="isAuthenticated()">
-    <!-- This part will be shown for authenticated users -->
+
     <div th:replace="fragments/nav-header-authorized"></div>
 </div>
 
