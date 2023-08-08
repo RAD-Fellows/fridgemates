@@ -1,6 +1,7 @@
 package com.fm.FridgeMates.controllers;
 
 import com.fm.FridgeMates.models.ApplicationUser;
+import com.fm.FridgeMates.models.Comment;
 import com.fm.FridgeMates.models.Ingredient;
 import com.fm.FridgeMates.models.Refrigerator;
 import com.fm.FridgeMates.repositories.ApplicationUserRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,16 +41,29 @@ public class RefrigeratorController {
 
     @GetMapping("/refrigerator/{id}")
     public String getRefrigeratorPage(Model m, Principal p, @PathVariable Long id){
-        if (p != null ){
+        ApplicationUser browsingUser = null;
+        if (p != null) {
             String username = p.getName();
-            ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
-            m.addAttribute("username", username);
+            browsingUser = applicationUserRepository.findByUsername(username);
         }
+        m.addAttribute("browsingUser", browsingUser);
 
         ApplicationUser foundUser = applicationUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         m.addAttribute("foundUser", foundUser);
 
+        if (browsingUser.getId().equals(foundUser.getId())) {
+            List<Comment> allComments = foundUser.getRefrigerator().getComments();
+            m.addAttribute("comments", allComments);
+        } else {
+            List<Comment> browsingUserComments = new ArrayList<>();
+            for (Comment comment : foundUser.getRefrigerator().getComments()) {
+                if (comment.getCommentCreator().getId().equals(browsingUser.getId())) {
+                    browsingUserComments.add(comment);
+                }
+            }
+            m.addAttribute("comments", browsingUserComments);
+        }
         return "refrigerators";
     }
 
@@ -69,6 +84,27 @@ public class RefrigeratorController {
         }
         return new RedirectView("/");
     }
+
+    @PostMapping("/refrigerator/add-comment")
+    public RedirectView addIngredient(Principal p, String body, Long refrigeratorId, Long foundUserId){
+
+        if (p != null){
+            String username = p.getName();
+            ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
+            LocalDate createdAt = LocalDate.now();
+            Refrigerator refrigerator = refrigeratorRepository.findById(refrigeratorId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Refrigerator not found"));
+
+            Comment newComment = new Comment(browsingUser, createdAt, body, false, false, refrigerator);
+            commentRepository.save(newComment);
+            refrigerator.getComments().add(newComment);
+            refrigeratorRepository.save(refrigerator);
+            return new RedirectView("/refrigerator/" + foundUserId);
+        }
+        return new RedirectView("/");
+    }
+
+
 
 
 
