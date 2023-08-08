@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,12 @@ public class AppUserController {
     @Autowired
     HttpServletRequest request;
 
+    @GetMapping("/admin")
+    public String getAdminPanel(Model model) {
+        List<ApplicationUser> users = applicationUserRepository.findAll();
+        model.addAttribute("users", users);
+        return "admin";
+    }
 
     @GetMapping("/login")
     public String getLoginPage() { return "login";}
@@ -65,6 +72,12 @@ public class AppUserController {
         }
 
         return "index";
+    }
+
+    @PostMapping("/delete")
+    public RedirectView deleteUser(@RequestParam Long userId) {
+        applicationUserRepository.deleteById(userId);
+        return new RedirectView("/admin");
     }
 
     @PostMapping("/signup")
