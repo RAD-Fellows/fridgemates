@@ -52,18 +52,32 @@ public class RefrigeratorController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         m.addAttribute("foundUser", foundUser);
 
-        if (browsingUser.getId().equals(foundUser.getId())) {
-            List<Comment> allComments = foundUser.getRefrigerator().getComments();
-            m.addAttribute("comments", allComments);
-        } else {
-            List<Comment> browsingUserComments = new ArrayList<>();
-            for (Comment comment : foundUser.getRefrigerator().getComments()) {
+        List<Comment> allComments = foundUser.getRefrigerator().getComments();
+        List<Comment> browsingUserComments = new ArrayList<>();
+        List<Comment> displayComments = new ArrayList<>();
+
+        if (browsingUser != null) {
+            for (Comment comment : allComments) {
                 if (comment.getCommentCreator().getId().equals(browsingUser.getId())) {
                     browsingUserComments.add(comment);
                 }
             }
-            m.addAttribute("comments", browsingUserComments);
         }
+
+        // If browsingUser owns the refrigerator, display all comments
+        if (browsingUser != null && browsingUser.getId().equals(foundUser.getId())) {
+            displayComments.addAll(allComments);
+        }
+        // Otherwise, display browsingUser's comments and their children
+        else if (!browsingUserComments.isEmpty()) {
+            for (Comment comment : allComments) {
+                if (comment.getParentComment() == null || browsingUserComments.contains(comment.getParentComment())) {
+                    displayComments.add(comment);
+                }
+            }
+        }
+
+        m.addAttribute("comments", displayComments);
         return "refrigerators";
     }
 
@@ -86,7 +100,7 @@ public class RefrigeratorController {
     }
 
     @PostMapping("/refrigerator/add-comment")
-    public RedirectView addIngredient(Principal p, String body, Long refrigeratorId, Long foundUserId){
+    public RedirectView addComment(Principal p, String body, Long refrigeratorId, Long foundUserId){
 
         if (p != null){
             String username = p.getName();
@@ -94,8 +108,31 @@ public class RefrigeratorController {
             LocalDate createdAt = LocalDate.now();
             Refrigerator refrigerator = refrigeratorRepository.findById(refrigeratorId)
                     .orElseThrow(() -> new ResourceNotFoundException("Refrigerator not found"));
+            Comment parentComment = null;
+            Comment newComment = new Comment(browsingUser, createdAt, body, false, false, refrigerator, parentComment);
+            commentRepository.save(newComment);
+            refrigerator.getComments().add(newComment);
+            refrigeratorRepository.save(refrigerator);
+            return new RedirectView("/refrigerator/" + foundUserId);
+        }
+        return new RedirectView("/");
+    }
 
-            Comment newComment = new Comment(browsingUser, createdAt, body, false, false, refrigerator);
+    @PostMapping("/refrigerator/add-reply")
+    public RedirectView addReply(Principal p, String body, Long refrigeratorId, Long foundUserId, Long parentCommentId){
+        if (p != null){
+            String username = p.getName();
+            ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
+            LocalDate createdAt = LocalDate.now();
+            Refrigerator refrigerator = refrigeratorRepository.findById(refrigeratorId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Refrigerator not found"));
+            Comment parentComment = null;
+            if(parentCommentId !=null){
+                parentComment = commentRepository.findById(parentCommentId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Parent Comment Not Found"));
+            }
+
+            Comment newComment = new Comment(browsingUser, createdAt, body, false, false, refrigerator, parentComment);
             commentRepository.save(newComment);
             refrigerator.getComments().add(newComment);
             refrigeratorRepository.save(refrigerator);
