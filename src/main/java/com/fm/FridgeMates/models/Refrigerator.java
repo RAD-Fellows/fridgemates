@@ -2,10 +2,11 @@ package com.fm.FridgeMates.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Refrigerator {
+public class Refrigerator implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

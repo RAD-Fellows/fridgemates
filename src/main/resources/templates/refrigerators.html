@@ -9,7 +9,7 @@
     <title>Refrigerator</title>
 </head>
 <body>
-
+<div th:replace="fragments/nav-header-authorized"></div>
 <div class="container">
     <ul>
         <li th:text="${username}">Username</li>
@@ -25,29 +25,162 @@
     </ul>
 </div>
 
-<section class="container-fluid">
-    <div class="col-12 col-sm-6 col-md-3">
-        <form action="/refrigerator/add-ingredient" method="POST" class="row g-3">
-            <div class="mb-3">
-                <label for="ingredientName" class="form-label">Ingredient Name</label>
-                <input type="text" name ="name" class="form-control" id="ingredientName">
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <input type="text" class="form-control" id="description" name="description">
-            </div>
-            <div class="mb-3">
-                <div class="form-group">
-                    <label for="dateAdded" class="form-label">Date Added</label>
-                    <input type="date" class="form-control" id="dateAdded" name="dateAdded">
+<button th:if="${browsingUser.id == foundUser.id}" type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#postModal">
+    Add an Ingredient
+</button>
+<button th:if="${browsingUser.id != foundUser.id}" type="button" data-bs-target="#postCommentModal" class="btn btn-primary my-3" data-bs-toggle="modal">
+    Add a Comment
+</button>
+
+<div class="container">
+<div th:if="${comments == null or #lists.isEmpty(comments)}" class="mt-4">
+    <h4>No comments available</h4>
+</div>
+<div th:else>
+    <h4>Comments</h4>
+    <div class="accordion" id="commentsAccordion">
+        <div th:each="comment : ${comments}" th:if="${comment.parentComment == null}">
+            <!-- Parent Comment -->
+            <div class="card">
+                <div class="card-header" th:id="'commentHeading-' + ${comment.id}">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                th:attr="data-bs-target='#commentCollapse-' + ${comment.id}, aria-controls='commentCollapse-' + ${comment.id}">
+                            [[${comment.commentCreator.username}]] said on [[${comment.date}]]:
+                        </button>
+                    </h5>
+                </div>
+                <div th:id="'commentCollapse-' + ${comment.id}" class="collapse"
+                     th:attr="aria-labelledby='commentHeading-' + ${comment.id}" data-bs-parent="#commentsAccordion">
+                    <div class="card-body">
+                        [[${comment.body}]]
+                        <button id= "btn-reply" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postReplyModal"
+                                th:attr="data-comment-parent-id=${comment.id}" data-comment-parent-id="${comment.id}">Reply
+                        </button>
+                        <!-- List of Replies -->
+                        <ul>
+                            <li th:each="reply : ${comment.replies}">
+                                <div class="card mt-2">
+                                    <div class="card-header" th:id="'replyHeading-' + ${reply.id}">
+                                        <h6 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                                    th:attr="data-bs-target='#replyCollapse-' + ${reply.id}, aria-controls='replyCollapse-' + ${reply.id}">
+                                                [[${reply.commentCreator.username}]] replied on [[${reply.date}]]:
+                                            </button>
+                                        </h6>
+                                    </div>
+                                    <div th:id="'replyCollapse-' + ${reply.id}" class="collapse">
+                                        <div class="card-body">
+                                            [[${reply.body}]]
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        </div>
     </div>
+</div>
+</div>
 
-</section>
+
+<div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postModalLabel">Add an Ingredient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="postForm" action="/refrigerator/add-ingredient" method="POST" class="row g-3">
+                    <div class="mb-3">
+                        <label for="ingredientName" class="form-label">Ingredient Name</label>
+                        <input type="text" name ="name" class="form-control" id="ingredientName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="dateAdded" class="form-label">Date Added</label>
+                            <input type="date" class="form-control" id="dateAdded" name="dateAdded">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit"  form="postForm" data-bs-dismiss="modal" class="btn btn-primary">Add Ingredient</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="postCommentModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postCommentModalLabel">Add a Comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="postCommentForm" action="/refrigerator/add-comment" method="POST" class="row g-3">
+                    <div class="mb-3">
+                        <label for="commentBody" class="form-label">Comment or Request</label>
+                        <input type="text" name ="body" class="form-control" id="commentBody">
+                    </div>
+                    <input type="hidden" name="refrigeratorId" th:value="${foundUser.refrigerator.id}" />
+                    <input type="hidden" name="foundUserId" th:value="${foundUser.id}" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit"  form="postCommentForm" data-bs-dismiss="modal" class="btn btn-primary">Add Comment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="postReplyModal" tabindex="-1" aria-labelledby="postReplyLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postReplyModalLabel">Add a Reply</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="postReplyForm" action="/refrigerator/add-reply" method="POST" class="row g-3">
+                    <div class="mb-3">
+                        <label for="replyBody" class="form-label">Comment or Request</label>
+                        <input type="text" name ="body" class="form-control" id="replyBody">
+                    </div>
+                    <input type="hidden" name="refrigeratorId" th:value="${foundUser.refrigerator.id}" />
+                    <input type="hidden" name="foundUserId" th:value="${foundUser.id}" />
+                    <input type="hidden" name="parentCommentId" th:value="${param.commentParentId}" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit"  form="postReplyForm" data-bs-dismiss="modal" class="btn btn-primary">Add Reply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const replyButtons = document.querySelectorAll('#btn-reply');
+    replyButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const parentCommentId = button.getAttribute('data-comment-parent-id');
+            const postReplyForm = document.querySelector('#postReplyForm');
+            // Set the value of the hidden field in the reply form
+            postReplyForm.querySelector('[name="parentCommentId"]').value = parentCommentId;
+        });
+    });
+</script>
 
 
 
