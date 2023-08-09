@@ -90,7 +90,9 @@ public class AppUserController {
         user.setRefrigerator(newRefrigerator);
         applicationUserRepository.save(user);
 
-        return new RedirectView ("/");
+        authWithHttpServletRequest(username, password);
+
+        return new RedirectView ("/myprofile");
     }
 
     @GetMapping("/myprofile")
