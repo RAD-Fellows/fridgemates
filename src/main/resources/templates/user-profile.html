@@ -5,106 +5,166 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link type="text/css" href="css/footer.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     <title>My Profile</title>
 </head>
 <body>
-<div th:replace="fragments/nav-header-authorized :: header"></div>
+<nav>
+    <header th:replace="fragments/nav-header-authorized :: header"></header>
+</nav>
 <main>
 
-<div class="card" style="width: 30rem;">
+    <h1 th:if="${browsingUser.username != null}" th:text="${'Welcome ' + browsingUser.username}">Hello!</h1>
 
-    <img th:src="${browsingUser?.imgUrl}" alt="Profile Avatar" class="rounded-square" width="150" height="150">
 
-    <div class="card-body">
-        <h5 th:text="${'Username: ' + browsingUser.username}" class="card-title">Username</h5>
-        <ul class="list-group list-group-flush">
-            <li th:text="'First Name: ' + ${browsingUser.firstName}" class="list-group-item">FIRST NAME</li>
-            <li th:text="'Last Name: ' + ${browsingUser.lastName}" class="list-group-item">LAST NAME</li>
-            <li th:text="'Date of Birth: ' + ${browsingUser.dateOfBirth}" class="list-group-item">DOB</li>
-            <li th:text="'Address: ' + ${browsingUser.address}" class="list-group-item">ADDRESS</li>
-            <li th:text="'City: ' + ${browsingUser.city}" class="list-group-item">CITY</li>
-            <li th:text="'State: ' + ${browsingUser.state}" class="list-group-item">STATE</li>
-            <li th:text="'Zip Code: ' + ${browsingUser.zip}" class="list-group-item">ZIP</li>
-        </ul>
-    </div>
-</div>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal">
-        Edit
-    </button>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-bg-success mb-3" style="width: 30rem;">
 
-    <!-- Modal -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update Information</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <img th:src="${browsingUser?.imgUrl}" alt="Profile Avatar" class="rounded-square" width="150"
+                     height="150">
+
+                <div class="card-body">
+                    <h5 th:text="${'Username: ' + browsingUser.username}" class="card-title">Username</h5>
+                    <ul class="list-group list-group-flush">
+                        <li th:text="'First Name: ' + ${browsingUser.firstName}" class="list-group-item">FIRST NAME</li>
+                        <li th:text="'Last Name: ' + ${browsingUser.lastName}" class="list-group-item">LAST NAME</li>
+                        <li th:text="'Date of Birth: ' + ${browsingUser.dateOfBirth}" class="list-group-item">DOB</li>
+                        <li th:text="'Address: ' + ${browsingUser.address}" class="list-group-item">ADDRESS</li>
+                        <li th:text="'City: ' + ${browsingUser.city}" class="list-group-item">CITY</li>
+                        <li th:text="'State: ' + ${browsingUser.state}" class="list-group-item">STATE</li>
+                        <li th:text="'Zip Code: ' + ${browsingUser.zip}" class="list-group-item">ZIP</li>
+                    </ul>
                 </div>
-                <div class="modal-body">
-                    <form th:action="'/myprofile/' + ${browsingUser.id}" th:method="PUT">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal">
+                    Edit Information
+                </button>
+            </div>
 
-                        <label for="firstName">First Name</label>
-                        <input th:value="${browsingUser.firstName}" type="text" name="firstName" id="firstName">
-                        </br>
-                        <label for="lastName">Last Name</label>
-                        <input th:value="${browsingUser.lastName}" type="text" name="lastName" id="lastName">
-                        </br>
-                        <label for="dateOfBirth">DOB</label>
-                        <input th:value="${browsingUser.dateOfBirth}" type="date" name="dateOfBirth" id="dateOfBirth">
-                        </br>
-                        <label for="address">Address</label>
-                        <input th:value="${browsingUser.address}" type="text" name="address" id="address">
-                        </br>
-                        <label for="city">City</label>
-                        <input th:value="${browsingUser.city}" type="text" name="city" id="city">
-                        </br>
-                        <label for="state">State</label>
-                        <input th:value="${browsingUser.state}" type="text" name="state" id="state">
-                        </br>
-                        <label for="zip">Zip Code</label>
-                        <input th:value="${browsingUser.zip}" type="number" name="zip" id="zip">
-                        </br>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </form>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!-- Modal -->
+            <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Update Information</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/myprofile/' + ${browsingUser.id}" th:method="PUT" class="row g-3">
+                                <!-- First Name -->
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="inputFirstName" class="form-label">First Name</label>
+                                        <input th:value="${browsingUser.firstName}" type="text" class="form-control"
+                                               id="inputFirstName" name="firstName">
+                                    </div>
+                                </div>
+                                <!-- Last Name -->
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="inputLastName" class="form-label">Last Name</label>
+                                        <input th:value="${browsingUser.lastName}" type="text" class="form-control"
+                                               id="inputLastName" name="lastName">
+                                    </div>
+                                </div>
+                                <!-- Date of Birth -->
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="inputDateOfBirth" class="form-label">Date of Birth</label>
+                                        <input th:value="${browsingUser.dateOfBirth}" type="date" class="form-control"
+                                               id="inputDateOfBirth" name="dateOfBirth">
+                                    </div>
+                                </div>
+                                <!-- Address -->
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="inputAddress" class="form-label">Address</label>
+                                        <input th:value="${browsingUser.address}" type="text" class="form-control"
+                                               id="inputAddress" name="address">
+                                    </div>
+                                </div>
+                                <!-- City -->
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="inputCity" class="form-label">City</label>
+                                        <input th:value="${browsingUser.city}" type="text" class="form-control"
+                                               id="inputCity" name="city">
+                                    </div>
+                                </div>
+                                <!-- State -->
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="state" class="form-label">State</label>
+                                        <select class="form-control" id="state" name="state">
+                                            <option value="" disabled>Select State</option>
+                                            <option th:each="state : ${usStates}" th:value="${state}" th:text="${state}"
+                                                    th:if="${state == browsingUser.state}" selected="selected"></option>
+                                            <option th:each="state : ${usStates}" th:value="${state}" th:text="${state}"
+                                                    th:if="${state != browsingUser.state}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Zip -->
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="inputZip" class="form-label">Zip</label>
+                                        <input th:value="${browsingUser.zip}" type="number" class="form-control"
+                                               id="inputZip" name="zip">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <h3>MyRefrigerator Contents</h3>
+                <table class="table table-sm table-primary table-striped-columns">
+                    <thead>
+                    <tr>
+                        <th scope="col">Item #:  </th>
+                        <th scope="col">Ingredient Name:  </th>
+                        <th scope="col">Description:  </th>
+                        <th scope="col">Date Added:  </th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr th:each="ingredient, ingredientStat : ${browsingUserRefrigerator.ingredients}">
+                        <td th:text="${ingredientStat.count}">1</td>
+                        <td th:text="${ingredient.ingredientName}">ING NAME</td>
+                        <td th:text="${ingredient.description}">DESC</td>
+                        <td th:text="${ingredient.dateAdded}">DATE ADDED</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <a th:href="'/refrigerator/' + ${browsingUser.id}" class="btn btn-primary">Go To My Refrigerator</a>
+            </div>
+        </div>
+
     </div>
-
-
-
-
-
-    <h3>MyRefrigerator Contents</h3>
-    <table>
-        <thead>
-        <tr>
-            <th scope="col">Ingredient Name: </th>
-            <th scope="col">Description: </th>
-            <th scope="col">Date Added: </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="ingredient : ${browsingUserRefrigerator.ingredients}">
-            <td th:text="${ingredient.ingredientName}">ING NAME</td>
-            <td th:text="${ingredient.description}">DESC</td>
-            <td th:text="${ingredient.dateAdded}">DATE ADDED</td>
-        </tr>
-        </tbody>
-    </table>
-    <a th:href="'/refrigerator/' + ${browsingUser.id}" class="btn btn-primary">Go To MyRefrigerator</a>
 </main>
+<footer>
+    <div th:replace="fragments/footer.html :: footer"></div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
 </body>
-<div th:replace="fragments/footer.html :: footer"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
 
 </html>
