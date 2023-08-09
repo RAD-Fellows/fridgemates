@@ -92,7 +92,7 @@ public class AppUserController {
 
         authWithHttpServletRequest(username, password);
 
-        return new RedirectView ("/");
+        return new RedirectView ("/myprofile");
     }
 
     @GetMapping("/myprofile")
