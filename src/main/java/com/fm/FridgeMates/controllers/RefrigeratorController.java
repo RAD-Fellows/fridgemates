@@ -51,14 +51,22 @@ public class RefrigeratorController {
         m.addAttribute("foundUser", foundUser);
 
         List<Comment> allComments = foundUser.getRefrigerator().getComments();
-        List<Comment> browsingUserComments = new ArrayList<>();
+        List<Comment> topLevelBrowsingUserComments = new ArrayList<>();
         List<Comment> displayComments = new ArrayList<>();
 
         if (browsingUser != null) {
             for (Comment comment : allComments) {
-                if (comment.getCommentCreator().getId().equals(browsingUser.getId())) {
-                    browsingUserComments.add(comment);
+                if (comment.getCommentCreator().getId().equals(browsingUser.getId()) && comment.getParentComment() == null) {
+                    topLevelBrowsingUserComments.add(comment);
                 }
+            }
+        }
+
+        // Reset the list to include only top-level comments from the current browsing user
+        topLevelBrowsingUserComments.clear();
+        for (Comment comment : allComments) {
+            if (comment.getCommentCreator().getId().equals(browsingUser.getId()) && comment.getParentComment() == null) {
+                topLevelBrowsingUserComments.add(comment);
             }
         }
 
@@ -66,10 +74,10 @@ public class RefrigeratorController {
         if (browsingUser != null && browsingUser.getId().equals(foundUser.getId())) {
             displayComments.addAll(allComments);
         }
-        // Otherwise, display browsingUser's comments and their children
-        else if (!browsingUserComments.isEmpty()) {
+        // Otherwise, display browsingUser's top-level comments and their children
+        else if (!topLevelBrowsingUserComments.isEmpty()) {
             for (Comment comment : allComments) {
-                if (comment.getParentComment() == null || browsingUserComments.contains(comment.getParentComment())) {
+                if ((comment.getParentComment() == null && comment.getCommentCreator().getId().equals(browsingUser.getId())) || topLevelBrowsingUserComments.contains(comment.getParentComment())) {
                     displayComments.add(comment);
                 }
             }
@@ -150,6 +158,18 @@ public class RefrigeratorController {
             refrigerator.getComments().add(newComment);
             refrigeratorRepository.save(refrigerator);
             return new RedirectView("/refrigerator/" + foundUserId);
+        }
+        return new RedirectView("/");
+    }
+
+    @DeleteMapping("/delete-comment/{commentId}")
+    public RedirectView deleteComment(@PathVariable Long commentId, Principal p) {
+        commentRepository.deleteById(commentId);
+
+        String browsingUserUsername = p.getName();
+        ApplicationUser browsingUser = applicationUserRepository.findByUsername(browsingUserUsername);
+        if (browsingUser != null) {
+            return new RedirectView("/refrigerator/" + browsingUser.getId());
         }
         return new RedirectView("/");
     }
