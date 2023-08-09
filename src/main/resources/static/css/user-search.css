@@ -6,7 +6,7 @@ main {
 }
 .card-img-top {
     object-fit: contain;
-    max-height: 100px; /* Set the desired image height */
+    max-height: 100px;
     margin: 0 auto;
 }
 .card-title {
