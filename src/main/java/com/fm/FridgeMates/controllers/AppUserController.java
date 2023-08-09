@@ -90,6 +90,8 @@ public class AppUserController {
         user.setRefrigerator(newRefrigerator);
         applicationUserRepository.save(user);
 
+        authWithHttpServletRequest(username, password);
+
         return new RedirectView ("/");
     }
 
