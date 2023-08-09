@@ -33,6 +33,7 @@
         <div class="card-body">
             <h5 class="card-title" th:text="'Ingredient Name: ' + ${ingredient.ingredientName}">INGREDIENT NAME</h5>
             <p class="card-text" th:text="'Description: ' + ${ingredient.description}">INGREDIENT DESC</p>
+            <p class="card-text" th:text="'Date Added: ' + ${ingredient.dateAdded}">INGREDIENT DATE ADDED</p>
             <form th:action="@{/ingredient/{id}(id=${ingredient.id})}" method="post">
                 <input type="hidden" name="_method" value="delete"/>
                 <button type="submit" class="btn btn-danger"  th:hidden="${!browsingUser.username.equals(foundUser.username)}">Delete</button>
@@ -67,35 +68,26 @@
                         <h5 class="mb-0">
                             <button class="btn btn-link" type="button" data-bs-toggle="collapse"
                                     th:attr="data-bs-target='#commentCollapse-' + ${comment.id}, aria-controls='commentCollapse-' + ${comment.id}">
-                                [[${comment.commentCreator.username}]] said on [[${comment.date}]]:
+                                View Replies
                             </button>
+                            [[${comment.commentCreator.username}]]: [[${comment.body}]]&nbsp;&nbsp;&nbsp;&nbsp;Posted On [[${comment.date}]]
+                            <button id="btn-reply" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postReplyModal"
+                                    th:attr="data-comment-parent-id=${comment.id}" data-comment-parent-id="${comment.id}">Reply to Thread
+                            </button>
+                            <form th:if="${browsingUser != null && browsingUser.id == foundUser.id}"
+                                  th:action="@{/delete-comment/{commentId}(commentId=${comment.id})}" method="post">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit" class="btn btn-danger">Delete</button>
                         </h5>
                     </div>
                     <div th:id="'commentCollapse-' + ${comment.id}" class="collapse"
                          th:attr="aria-labelledby='commentHeading-' + ${comment.id}" data-bs-parent="#commentsAccordion">
                         <div class="card-body">
-                            [[${comment.body}]]
-                            <button id= "btn-reply" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postReplyModal"
-                                    th:attr="data-comment-parent-id=${comment.id}" data-comment-parent-id="${comment.id}">Reply
-                            </button>
+
                             <!-- List of Replies -->
-                            <ul>
-                                <li th:each="reply : ${comment.replies}">
-                                    <div class="card mt-2">
-                                        <div class="card-header" th:id="'replyHeading-' + ${reply.id}">
-                                            <h6 class="mb-0">
-                                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                                                        th:attr="data-bs-target='#replyCollapse-' + ${reply.id}, aria-controls='replyCollapse-' + ${reply.id}">
-                                                    [[${reply.commentCreator.username}]] replied on [[${reply.date}]]:
-                                                </button>
-                                            </h6>
-                                        </div>
-                                        <div th:id="'replyCollapse-' + ${reply.id}" class="collapse">
-                                            <div class="card-body">
-                                                [[${reply.body}]]
-                                            </div>
-                                        </div>
-                                    </div>
+                            <ul class="list-group">
+                                <li th:each="reply : ${comment.replies}" class="list-group-item">
+                                    [[${reply.commentCreator.username}]] replied on [[${reply.date}]]: [[${reply.body}]]
                                 </li>
                             </ul>
                         </div>
@@ -105,7 +97,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
     <div class="modal-dialog">
