@@ -9,80 +9,98 @@
     <title>Refrigerator</title>
 </head>
 <body>
-<div th:replace="fragments/nav-header-authorized"></div>
-<div class="container">
-    <ul>
-        <li th:text="${username}">Username</li>
-        <li th:text="${foundUser.firstName}">first name</li>
-        <li th:text="${foundUser.lastName}">last name</li>
-        <li th:text="${foundUser.username}">username</li>
-        <li th:text="${foundUser.dateOfBirth}">date of birth</li>
 
+
+    <h1 th:if="${browsingUser.username != null}" th:text="${'Welcome, ' + browsingUser.username}">Hello!</h1>
+    <h2 th:if="${browsingUser.username != null}" th:text="${'This refrigerator belongs to ' + foundUser.username }" th:hidden="${browsingUser.username.equals(foundUser.username)}">Check out my refrigerator!</h2>
+
+
+    <ul th:hidden="${browsingUser.username.equals(foundUser.username)}">
+        <h5>Verify they are in your area</h5>
+        <li th:text="'City: ' + ${foundUser.city}">CITY</li>
+        <li th:text="'State: ' +${foundUser.state}">STATE</li>
+        <li th:text="'Zip Code: ' + ${foundUser.zip}">ZIP</li>
     </ul>
 
-    <ul th:if="${foundUser.refrigerator.ingredients != null and not #lists.isEmpty(foundUser.refrigerator.ingredients)}" th:each="ingredient : ${foundUser.refrigerator.ingredients}">
-        <li th:text="'Ingredient Name: ' + ${ingredient.ingredientName} +  ' Ingredient Description: ' + ${ingredient.description}"></li>
-    </ul>
+<h2>Refrigerator Contents</h2>
+<div class="food-container">
+    <div class="row">
+      <div th:if="${foundUser.refrigerator.ingredients != null}" th:each="ingredient : ${foundUser.refrigerator.ingredients}" class="card" style="width: 10rem;" >
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/British_Columbia_SA-042.svg/800px-British_Columbia_SA-042.svg.png" class="card-img-top" alt="food icon">
+        <div class="card-body">
+            <h5 class="card-title" th:text="'Ingredient Name: ' + ${ingredient.ingredientName}">INGREDIENT NAME</h5>
+            <p class="card-text" th:text="'Description: ' + ${ingredient.description}">INGREDIENT DESC</p>
+            <form th:action="@{/ingredient/{id}(id=${ingredient.id})}" method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit" class="btn btn-danger"  th:hidden="${!browsingUser.username.equals(foundUser.username)}">Delete</button>
+            </form>
+        </div>
+      </div>
+    </div>
 </div>
+
+<a th:if="${browsingUser.username}" class="btn btn-secondary" href="/myprofile" role="button" th:hidden="${!browsingUser.username.equals(foundUser.username)}">View MyProfile</a>
+
+
 
 <button th:if="${browsingUser.id == foundUser.id}" type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#postModal">
-    Add an Ingredient
+    Add Ingredient
 </button>
 <button th:if="${browsingUser.id != foundUser.id}" type="button" data-bs-target="#postCommentModal" class="btn btn-primary my-3" data-bs-toggle="modal">
-    Add a Comment
+    Add Comment
 </button>
 
 <div class="container">
-<div th:if="${comments == null or #lists.isEmpty(comments)}" class="mt-4">
-    <h4>No comments available</h4>
-</div>
-<div th:else>
-    <h4>Comments</h4>
-    <div class="accordion" id="commentsAccordion">
-        <div th:each="comment : ${comments}" th:if="${comment.parentComment == null}">
-            <!-- Parent Comment -->
-            <div class="card">
-                <div class="card-header" th:id="'commentHeading-' + ${comment.id}">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                                th:attr="data-bs-target='#commentCollapse-' + ${comment.id}, aria-controls='commentCollapse-' + ${comment.id}">
-                            [[${comment.commentCreator.username}]] said on [[${comment.date}]]:
-                        </button>
-                    </h5>
-                </div>
-                <div th:id="'commentCollapse-' + ${comment.id}" class="collapse"
-                     th:attr="aria-labelledby='commentHeading-' + ${comment.id}" data-bs-parent="#commentsAccordion">
-                    <div class="card-body">
-                        [[${comment.body}]]
-                        <button id= "btn-reply" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postReplyModal"
-                                th:attr="data-comment-parent-id=${comment.id}" data-comment-parent-id="${comment.id}">Reply
-                        </button>
-                        <!-- List of Replies -->
-                        <ul>
-                            <li th:each="reply : ${comment.replies}">
-                                <div class="card mt-2">
-                                    <div class="card-header" th:id="'replyHeading-' + ${reply.id}">
-                                        <h6 class="mb-0">
-                                            <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                                                    th:attr="data-bs-target='#replyCollapse-' + ${reply.id}, aria-controls='replyCollapse-' + ${reply.id}">
-                                                [[${reply.commentCreator.username}]] replied on [[${reply.date}]]:
-                                            </button>
-                                        </h6>
-                                    </div>
-                                    <div th:id="'replyCollapse-' + ${reply.id}" class="collapse">
-                                        <div class="card-body">
-                                            [[${reply.body}]]
+    <div th:if="${comments == null or #lists.isEmpty(comments)}" class="mt-4">
+        <h4>No comments available</h4>
+    </div>
+    <div th:else>
+        <h4>Comments</h4>
+        <div class="accordion" id="commentsAccordion">
+            <div th:each="comment : ${comments}" th:if="${comment.parentComment == null}">
+                <!-- Parent Comment -->
+                <div class="card">
+                    <div class="card-header" th:id="'commentHeading-' + ${comment.id}">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                    th:attr="data-bs-target='#commentCollapse-' + ${comment.id}, aria-controls='commentCollapse-' + ${comment.id}">
+                                [[${comment.commentCreator.username}]] said on [[${comment.date}]]:
+                            </button>
+                        </h5>
+                    </div>
+                    <div th:id="'commentCollapse-' + ${comment.id}" class="collapse"
+                         th:attr="aria-labelledby='commentHeading-' + ${comment.id}" data-bs-parent="#commentsAccordion">
+                        <div class="card-body">
+                            [[${comment.body}]]
+                            <button id= "btn-reply" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postReplyModal"
+                                    th:attr="data-comment-parent-id=${comment.id}" data-comment-parent-id="${comment.id}">Reply
+                            </button>
+                            <!-- List of Replies -->
+                            <ul>
+                                <li th:each="reply : ${comment.replies}">
+                                    <div class="card mt-2">
+                                        <div class="card-header" th:id="'replyHeading-' + ${reply.id}">
+                                            <h6 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                                        th:attr="data-bs-target='#replyCollapse-' + ${reply.id}, aria-controls='replyCollapse-' + ${reply.id}">
+                                                    [[${reply.commentCreator.username}]] replied on [[${reply.date}]]:
+                                                </button>
+                                            </h6>
+                                        </div>
+                                        <div th:id="'replyCollapse-' + ${reply.id}" class="collapse">
+                                            <div class="card-body">
+                                                [[${reply.body}]]
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 
