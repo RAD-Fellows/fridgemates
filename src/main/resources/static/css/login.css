@@ -40,7 +40,7 @@ body{
 
 .input-group-append, .input-group-prepend {
     display: flex;
-    align-items: center; /* This ensures the content is vertically centered */
+    align-items: center;
 }
 
 .input-group-text {

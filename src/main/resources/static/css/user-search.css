@@ -1,14 +1,70 @@
 main {
-    margin-top: 100px;
+    position: relative;
+    margin-top: 150px;
 }
-.card {
-    height: 100%;
+
+input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    background-color: #fff;
+    margin-bottom: 20px;
 }
-.card-img-top {
-    object-fit: contain;
-    max-height: 100px; /* Set the desired image height */
-    margin: 0 auto;
+
+
+.main-box {
+    background-color: #ffffff;
+    -webkit-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    -moz-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    -o-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    -ms-box-shadow: 1px 1px 2px 0 #CCCCCC;
+    box-shadow: 1px 1px 2px 0 #CCCCCC;
+    margin-bottom: 16px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
-.card-title {
-    font-size: 1.25rem;
+
+.table a.table-link.danger {
+    color: #e74c3c;
+}
+
+.label {
+    border-radius: 3px;
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.user-list tbody td .user-subhead {
+    font-size: 0.875em;
+    font-style: italic;
+}
+
+.user-list tbody td .user-link {
+    display: block;
+    font-size: 1.25em;
+    padding-top: 3px;
+    margin-left: 60px;
+}
+
+a {
+    color: #3498db;
+    outline: none!important;
+}
+
+.user-list tbody td>img {
+    position: relative;
+    max-width: 50px;
+    float: left;
+    margin-right: 15px;
+}
+
+.table thead tr th {
+    text-transform: uppercase;
+    font-size: 0.875em;
 }
