@@ -96,6 +96,12 @@ public class AppUserController {
     @GetMapping("/myprofile")
     public String getProfile(Model m, Principal p) {
         if (p != null){
+            List<String> usStates = Arrays.asList("AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT",
+                    "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA",
+                    "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH",
+                    "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN",
+                    "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY");
+            m.addAttribute("usStates", usStates);
             String username = p.getName();
             ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
             Refrigerator userRefrigerator = browsingUser.getRefrigerator();
@@ -110,8 +116,8 @@ public class AppUserController {
     @PutMapping("/myprofile/{id}")
     public RedirectView editUserInfo(Model m, Principal p, @PathVariable Long id, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip){
         if(p != null){
-            ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
 
+            ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
             browsingUser.setFirstName(firstName);
             browsingUser.setLastName(lastName);
             browsingUser.setDateOfBirth(dateOfBirth);
