@@ -2,28 +2,17 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link type="text/css" href="css/footer.css" rel="stylesheet">
     <link type="text/css" href="css/login.css" rel="stylesheet">
-
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <title>Login</title>
-    <style>
-        #login {
-            margin-top: 60px;
-        }
-    </style>
 </head>
 <body>
-<div sec:authorize="isAnonymous()">
-    <div th:replace="fragments/nav-header-unauthorized"></div>
-</div>
-<div sec:authorize="isAuthenticated()">
-    <div th:replace="fragments/nav-header-authorized"></div>
-</div>
+<div th:replace="fragments/nav-header-unauthorized :: header"></div>
 <br>
 <br>
-<div class="container">
+<div id="login-form" class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card-group mb-0">
@@ -64,7 +53,7 @@
     </div>
 </div>
 
-<div th:replace="fragments/footer"></div>
+<div th:replace="fragments/footer.html :: footer"></div>
 
 
 </body>

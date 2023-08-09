@@ -6,6 +6,11 @@ body {
     position: relative;
     height: 100%;
 }
+
+ #signup {
+      margin-top: 60px;
+    }
+
 .account-settings .user-profile {
     margin: 0 0 1rem 0;
     padding-bottom: 1rem;

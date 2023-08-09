@@ -1,0 +1,14 @@
+main {
+    margin-top: 100px;
+}
+.card {
+    height: 100%;
+}
+.card-img-top {
+    object-fit: contain;
+    max-height: 100px; /* Set the desired image height */
+    margin: 0 auto;
+}
+.card-title {
+    font-size: 1.25rem;
+}
