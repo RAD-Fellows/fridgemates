@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -37,6 +39,23 @@ public class AdminPanelController {
         return "admin";
     }
 
+//    @GetMapping("/myprofile/{id}")
+//    public RedirectView viewUserInfo(Model m, Principal p, @PathVariable Long id, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip){
+//        if(p != null){
+//
+//            ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
+//            browsingUser.setFirstName(firstName);
+//            browsingUser.setLastName(lastName);
+//            browsingUser.setDateOfBirth(dateOfBirth);
+//            browsingUser.setAddress(address);
+//            browsingUser.setCity(city);
+//            browsingUser.setState(state);
+//            browsingUser.setZip(zip);
+//            applicationUserRepository.save(browsingUser);
+//            m.addAttribute("browsingUser", browsingUser);
+//        }
+//        return new RedirectView("/myprofile/" + browsingUser.id);
+//    }
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long userId) {
         Optional<ApplicationUser> userToDelete = applicationUserRepository.findById(userId);
