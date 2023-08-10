@@ -24,6 +24,10 @@ color: #DAE9EB;
 margin-left: 10%;
 }
 
+.modal-content {
+background: rgba(206, 144, 183, 0.9);
+}
+
 .table-container {
  max-height: 600px;
   overflow-y: auto;
