@@ -1,0 +1,43 @@
+body {
+    background-image: url('https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+    background-size: cover; /* This will adjust the width and height to cover the entire container */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-attachment: fixed; /* Keep the background image fixed while scrolling */
+}
+
+main {
+margin-top: 100px;
+margin-bottom: 100px;
+}
+
+
+.Main-row {
+display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+.card {
+background: rgba(0, 0, 0, 0.7);
+color: #DAE9EB;
+margin-left: 10%;
+}
+
+.table-container {
+ max-height: 600px;
+  overflow-y: auto;
+}
+
+.table {
+border: 3px solid green;
+max-width: 100%;
+word-wrap: break-word;
+}
+
+
+h3 {
+text-align: center;
+color: #DAE9EB;
+background: rgba(0, 0, 0, 0.7)
+}
