@@ -162,19 +162,59 @@
     background-color: transparent; /* Ensure replies don't inherit the gray background */
 }
 
-/* Styling for the accordion */
 .accordion-button:focus {
     box-shadow: none;
 }
 
+/* Overall styling */
+.container {
+    font-family: Arial, sans-serif;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.table img {
+    width: 60px;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    cursor: pointer;
+}
+
 
     </style>
+
 </head>
 <div th:replace="fragments/nav-header-authorized"></div>
 
-
-<h1 th:if="${browsingUser.username != null}" th:text="${'Welcome, ' + browsingUser.username}">Hello!</h1>
-<h2 th:if="${browsingUser.username != null}" th:text="${'This refrigerator belongs to ' + foundUser.username }" th:hidden="${browsingUser.username.equals(foundUser.username)}">Check out my refrigerator!</h2>
+<h1 style="margin-top: 150px;" th:if="${browsingUser.username != null}" th:text="${'Welcome, ' + browsingUser.username}">Hello!</h1>
+<h2 style="margin-top: 150px;" th:if="${browsingUser.username != null}" th:text="${'This refrigerator belongs to ' + foundUser.username }" th:hidden="${browsingUser.username.equals(foundUser.username)}">Check out my refrigerator!</h2>
 
 
 <!--    <ul th:hidden="${browsingUser.username.equals(foundUser.username)}">-->
@@ -195,30 +235,37 @@
 </div>
 
 <div class="container">
-    <h2>Refrigerator Contents</h2>
     <div class="row">
-        <!-- Refrigerator Contents -->
         <div class="col-md-6">
-            <div class="row food-container">
-                <div th:if="${foundUser.refrigerator.ingredients != null}" th:each="ingredient : ${foundUser.refrigerator.ingredients}" class="col-sm*- col-md-2">
-                    <div class="card">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/British_Columbia_SA-042.svg/800px-British_Columbia_SA-042.svg.png" class="card-img-top" alt="food icon">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="'Ingredient Name: ' + ${ingredient.ingredientName}">INGREDIENT NAME</h5>
-                            <p class="card-text" th:text="'Description: ' + ${ingredient.description}">INGREDIENT DESC</p>
-                            <p class="card-text" th:text="'Date Added: ' + ${ingredient.dateAdded}">INGREDIENT DATE ADDED</p>
+            <h2>My Fridge</h2>
+            <div th:if="${foundUser.refrigerator.ingredients != null}">
+                <table class="table table-striped"> <!-- Using Bootstrap table classes for styling -->
+                    <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Ingredient Name</th>
+                        <th>Description</th>
+                        <th>Date Added</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ingredient : ${foundUser.refrigerator.ingredients}">
+                        <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/British_Columbia_SA-042.svg/800px-British_Columbia_SA-042.svg.png" alt="food icon" style="width:60px; height:auto;"></td>
+                        <td th:text="${ingredient.ingredientName}">INGREDIENT NAME</td>
+                        <td th:text="${ingredient.description}">INGREDIENT DESC</td>
+                        <td th:text="${ingredient.dateAdded}">INGREDIENT DATE ADDED</td>
+                        <td>
                             <form th:action="@{/ingredient/{id}(id=${ingredient.id})}" method="post">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger" th:hidden="${!browsingUser.username.equals(foundUser.username)}">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" th:hidden="${!browsingUser.username.equals(foundUser.username)}">Delete</button>
                             </form>
-                        </div>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <!-- Comments and Replies -->
-        <!-- ... [Your previous HTML code before the comments section] ... -->
 
         <div class="col-md-6">
             <div class="comment-wrapper">
