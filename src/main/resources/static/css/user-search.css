@@ -1,3 +1,10 @@
+body {
+    background-image: url('https://cdn.pixabay.com/photo/2020/03/21/02/26/pizza-4952508_1280.jpg');
+    background-size: cover; /* This will adjust the width and height to cover the entire container */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-attachment: fixed; /* Keep the background image fixed while scrolling */
+}
+
 main {
     position: relative;
     margin-top: 150px;

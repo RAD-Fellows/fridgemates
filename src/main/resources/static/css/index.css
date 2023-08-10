@@ -1,3 +1,7 @@
+body {
+background: linear-gradient(to right, #CE90B7, #e6e6ff);
+}
+
 .hero-image {
     margin-top: 100px;
     position: relative;
