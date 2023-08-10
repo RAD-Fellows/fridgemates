@@ -1,6 +1,10 @@
 body{
     margin-top:20px;
-    background: linear-gradient(to right, #CE90B7, #e6e6ff);
+    background: linear-gradient(to right, #554c86, #e6e6ff);
+}
+
+main {
+margin-bottom: 200px;
 }
 .container {
     margin-right: auto;

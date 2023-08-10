@@ -1,5 +1,10 @@
 body {
-background: linear-gradient(to right, #CE90B7, #e6e6ff);
+background: #E1EFF5;
+}
+
+main {
+margin-top: 100px;
+margin-bottom: 200px;
 }
 
 .hero-image {
@@ -30,5 +35,6 @@ background: linear-gradient(to right, #CE90B7, #e6e6ff);
 
 .mission-statement {
     padding: 50px 0;
+    margin-bottom: 20px;
 }
 

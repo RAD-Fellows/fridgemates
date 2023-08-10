@@ -6,8 +6,13 @@
 <!--  <link type="text/css" href="css/footer.css" rel="stylesheet">-->
   <link type="text/css" href="css/login.css" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-  <style>body {
-    margin-top: 150px;
+  <style>
+  body {
+    margin-top: 100px;
+}
+
+main {
+  margin-bottom: 250px;
 }
 
 .footer {
@@ -22,7 +27,7 @@
 }
 
 .footer_menu {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .footer_menu ul {
@@ -46,7 +51,7 @@
 }
 
 .footer_profile {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .footer_profile ul {
@@ -92,10 +97,12 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     color: #fff;
-}</style>
+}
+</style>
   <title>Sign-Up</title>
 </head>
 <body>
+<main>
 <div th:replace="fragments/nav-header-unauthorized :: header"></div>
 <div class="container">
   <h1 id="signup">Sign Up:</h1>
@@ -216,6 +223,7 @@
     </div>
   </div>
 </div>
+</main>
 
 
 <div th:replace="fragments/footer.html :: footer"></div>

@@ -8,6 +8,7 @@ body {
 main {
     position: relative;
     margin-top: 150px;
+    margin-bottom: 200px;
 }
 
 input {
