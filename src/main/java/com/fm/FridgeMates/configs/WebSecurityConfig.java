@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/signup").permitAll()
                         .requestMatchers("/css/**").permitAll()
+//                      .mvcMatchers("/admin").has Authority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin()
