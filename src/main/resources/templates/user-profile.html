@@ -9,21 +9,20 @@
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link type="text/css" href="css/footer.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link type="text/css" href="css/user-profile.css" rel="stylesheet">
     <title>My Profile</title>
 </head>
 <body>
-<nav>
-    <header th:replace="fragments/nav-header-authorized :: header"></header>
-</nav>
+
+<nav th:replace="fragments/nav-header-authorized :: header"></nav>
+
 <main>
 
-    <h1 th:if="${browsingUser.username != null}" th:text="${'Welcome ' + browsingUser.username}">Hello!</h1>
 
 
-
-    <div class="row">
+    <div class="Main-row">
         <div class="col-md-4">
-            <div class="card text-bg-success mb-3" style="width: 30rem;">
+            <div class="card mb-3" style="width: 30rem;">
 
                 <img th:src="${browsingUser?.imgUrl}" alt="Profile Avatar" class="rounded-square" width="150"
                      height="150">
@@ -42,7 +41,7 @@
                 </div>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal">
-                    Edit Information
+                    Edit My Information
                 </button>
             </div>
 
@@ -131,10 +130,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
-            <div class="col-md-12">
-                <h3>MyRefrigerator Contents</h3>
-                <table class="table table-sm table-primary table-striped-columns">
+        <div class="table-container">
+
+                <h3>Current Refrigerator Contents</h3>
+                <table class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Item #:  </th>
@@ -152,8 +151,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <a th:href="'/refrigerator/' + ${browsingUser.id}" class="btn btn-primary">Go To My Refrigerator</a>
-            </div>
+
         </div>
 
     </div>
