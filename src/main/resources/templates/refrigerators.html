@@ -213,9 +213,8 @@
 </head>
 <div th:replace="fragments/nav-header-authorized"></div>
 
-
-<h1 th:if="${browsingUser.username != null}" th:text="${'Welcome, ' + browsingUser.username}">Hello!</h1>
-<h2 th:if="${browsingUser.username != null}" th:text="${'This refrigerator belongs to ' + foundUser.username }" th:hidden="${browsingUser.username.equals(foundUser.username)}">Check out my refrigerator!</h2>
+<h1 style="margin-top: 150px;" th:if="${browsingUser.username != null}" th:text="${'Welcome, ' + browsingUser.username}">Hello!</h1>
+<h2 style="margin-top: 150px;" th:if="${browsingUser.username != null}" th:text="${'This refrigerator belongs to ' + foundUser.username }" th:hidden="${browsingUser.username.equals(foundUser.username)}">Check out my refrigerator!</h2>
 
 
 <!--    <ul th:hidden="${browsingUser.username.equals(foundUser.username)}">-->
