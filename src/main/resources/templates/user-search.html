@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link type="text/css" href="css/user-search.css" rel="stylesheet">
+    <link type="text/css" href="css/footer.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <title>Search Users</title>
+</head>
+<body>
+
+<div th:replace="fragments/nav-header-authorized"></div>
+<main class="container" id="userList">
+    <div class="mb-3">
+        <label for="searchInput" class="form-label">Search Ingredients or UserNames</label>
+        <input type="text" id="searchInput" placeholder="Search ingredients or users...">
+    </div>
+    <div class="container bootstrap snippets bootdey">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main-box no-header clearfix">
+                    <div class="main-box-body clearfix">
+                        <div class="table-responsive">
+                            <table class="table user-list">
+                                <thead>
+                                <tr>
+                                    <th><span>Profile Image</span></th>
+                                    <th><span>Username</span></th>
+                                    <th><span>City</span></th>
+                                    <th><span>Ingredients</span></th>
+                                    <th><span>View Refrigerator</span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user : ${users}">
+                                    <td>
+                                        <img th:src="@{${user.imgUrl}}" class="img-fluid" alt="User Image">
+                                        <a th:href="@{/user/{id}(id=${#strings.toString(user.id)})}" class="user-link" th:text="${user.username}"></a>
+                                        <span class="user-subhead" th:text="${user.city}"></span>
+                                    </td>
+                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.city}"></td>
+                                    <td th:text="${#strings.arrayJoin(user.refrigerator.ingredients.![ingredientName], ', ')}"></td>
+                                    <td><a th:href="@{/refrigerator/{id}(id=${#strings.toString(user.id)})}" class="btn btn-primary">View Refrigerator</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</main>
+</body>
+<div th:replace="fragments/footer.html :: footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+
+        searchInput.addEventListener("input", function () {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            document.querySelectorAll(".user-list tbody tr").forEach(function (row) {
+                const userName = row.querySelector(".user-link").textContent.toLowerCase();
+                const userCity = row.querySelector(".user-subhead").textContent.toLowerCase();
+                const ingredients = row.cells[3].textContent.toLowerCase();
+
+                if (userName.includes(searchTerm) || userCity.includes(searchTerm) || ingredients.includes(searchTerm)) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    });
+
+</script>
+</html>

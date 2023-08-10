@@ -2,11 +2,14 @@ package com.fm.FridgeMates.models;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.time.LocalDate;
+
+
 
 @Entity
 public class ApplicationUser implements UserDetails {
@@ -24,7 +27,7 @@ public class ApplicationUser implements UserDetails {
     Integer zip;
     String imgUrl;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "refrigerator_id")
     Refrigerator refrigerator;
 

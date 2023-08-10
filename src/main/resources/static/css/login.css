@@ -10,6 +10,10 @@ body{
     width: 100%;
 }
 
+#login-form {
+    margin-top: 15vh;
+}
+
 @media (min-width: 576px) {
     .container {
         max-width: 540px;
@@ -36,7 +40,7 @@ body{
 
 .input-group-append, .input-group-prepend {
     display: flex;
-    align-items: center; /* This ensures the content is vertically centered */
+    align-items: center;
 }
 
 .input-group-text {

@@ -10,9 +10,9 @@ public class Refrigerator implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @OneToMany(mappedBy = "refrigerator")
+    @OneToMany(mappedBy = "refrigerator" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<Ingredient> ingredients;
-    @OneToMany(mappedBy = "refrigerator")
+    @OneToMany(mappedBy = "refrigerator" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comment> comments;
 
 

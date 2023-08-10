@@ -70,6 +70,7 @@ public class Ingredient implements Serializable {
         this.refrigerator = refrigerator;
     }
 
+
     @Override
     public String toString() {
         return "Ingredient{" +

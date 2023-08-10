@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.Optional;
 import java.util.List;
 
@@ -15,22 +17,21 @@ import java.util.List;
 public class AdminPanelController {
 
     @Autowired
-    private ApplicationUserRepository applicationUserRepository;
+     ApplicationUserRepository applicationUserRepository;
 
     @Autowired
-    private RefrigeratorRepository refrigeratorRepository;
+     RefrigeratorRepository refrigeratorRepository;
 
     @Autowired
-    private IngredientRepository ingredientRepository;
-
-    public AdminPanelController(ApplicationUserRepository applicationUserRepository, RefrigeratorRepository refrigeratorRepository, IngredientRepository ingredientRepository) {
-        this.applicationUserRepository = applicationUserRepository;
-        this.refrigeratorRepository = refrigeratorRepository;
-        this.ingredientRepository = ingredientRepository;
-    }
+     IngredientRepository ingredientRepository;
 
     @GetMapping("/admin")
-    public String adminPanel(Model model) {
+    public String adminPanel(Model model, Principal p) {
+        if (p!=null) {
+            String username = p.getName();
+            ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
+            model.addAttribute("browsingUser", browsingUser);
+        }
         List<ApplicationUser> users = applicationUserRepository.findAll();
         model.addAttribute("users", users);
         return "admin";
@@ -42,7 +43,6 @@ public class AdminPanelController {
         if (userToDelete.isPresent()) {
             ApplicationUser user = userToDelete.get();
             if (!user.getUsername().equals("Admin1")) {
-                // Delete user, refrigerator, and associated ingredients
                 applicationUserRepository.delete(user);
             }
         }

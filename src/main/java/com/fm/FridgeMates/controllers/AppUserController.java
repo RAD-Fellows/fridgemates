@@ -90,17 +90,25 @@ public class AppUserController {
         user.setRefrigerator(newRefrigerator);
         applicationUserRepository.save(user);
 
-        return new RedirectView ("/");
+        authWithHttpServletRequest(username, password);
+
+        return new RedirectView ("/myprofile");
     }
 
     @GetMapping("/myprofile")
     public String getProfile(Model m, Principal p) {
         if (p != null){
+            List<String> usStates = Arrays.asList("AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT",
+                    "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA",
+                    "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH",
+                    "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN",
+                    "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY");
+            m.addAttribute("usStates", usStates);
             String username = p.getName();
-            ApplicationUser currentUser = applicationUserRepository.findByUsername(username);
-            Refrigerator userRefrigerator = currentUser.getRefrigerator();
-            m.addAttribute("currentUser", currentUser);
-            m.addAttribute("currentUserRefrigerator", userRefrigerator);
+            ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
+            Refrigerator userRefrigerator = browsingUser.getRefrigerator();
+            m.addAttribute("browsingUser", browsingUser);
+            m.addAttribute("browsingUserRefrigerator", userRefrigerator);
 
         }
         return "user-profile.html";
@@ -110,19 +118,37 @@ public class AppUserController {
     @PutMapping("/myprofile/{id}")
     public RedirectView editUserInfo(Model m, Principal p, @PathVariable Long id, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip){
         if(p != null){
-            ApplicationUser currentUser = applicationUserRepository.findById(id).orElseThrow();
 
-            currentUser.setFirstName(firstName);
-            currentUser.setLastName(lastName);
-            currentUser.setDateOfBirth(dateOfBirth);
-            currentUser.setAddress(address);
-            currentUser.setCity(city);
-            currentUser.setState(state);
-            currentUser.setZip(zip);
-            applicationUserRepository.save(currentUser);
-            m.addAttribute("currentUser", currentUser);
+            ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
+            browsingUser.setFirstName(firstName);
+            browsingUser.setLastName(lastName);
+            browsingUser.setDateOfBirth(dateOfBirth);
+            browsingUser.setAddress(address);
+            browsingUser.setCity(city);
+            browsingUser.setState(state);
+            browsingUser.setZip(zip);
+            applicationUserRepository.save(browsingUser);
+            m.addAttribute("browsingUser", browsingUser);
         }
         return new RedirectView("/myprofile");
+    }
+
+    @GetMapping("/users")
+    public String getAllUsers(Model m, Principal p){
+        if (p != null){
+            String username = p.getName();
+            ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
+            m.addAttribute("browsingUser", browsingUser);
+
+            List<ApplicationUser> usersInSameCity = applicationUserRepository.findByCityAndIdNot(browsingUser.getCity(), browsingUser.getId());
+            for (ApplicationUser user : usersInSameCity) {
+                System.out.println(user.getUsername() + user.getCity());
+            }
+
+            m.addAttribute("users", usersInSameCity);
+            return "user-search.html";
+        }
+        return "index.html";
     }
 
 
