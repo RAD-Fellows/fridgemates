@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link type="text/css" href="css/footer.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Home Page</title>
+</head>
+<body>
+<div sec:authorize="isAnonymous()">
+    <div th:replace="fragments/nav-header-unauthorized :: header"></div>
+</div>
+<div sec:authorize="isAuthenticated()">
+
+    <div th:replace="fragments/nav-header-authorized :: header"></div>
+</div>
+<main>
+<section class="hero-image">
+    <div class="container hero-content">
+        <h1 class="display-4">Welcome to Fridge Mates</h1>
+        <p class="lead">Join us in the journey to reduce food waste and build a community of sharing and sustainability.</p>
+    </div>
+</section>
+
+<!-- Mission statement section -->
+<section id="mission" class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="mb-4">Our Mission</h2>
+            <p>Fridge Mates is dedicated to reducing food waste by connecting members of a community through a social application. Users can post the contents of their refrigerators, propose trades, or offer to take expiring food. Our tech-driven platform focuses on doing good for the environment and fostering a sense of unity.</p>
+        </div>
+        <div class="col-md-6">
+            <h2 class="mb-4">Highlights</h2>
+            <ul class="list-unstyled">
+                <li class="mb-3"><i class="bi bi-check2-circle text-success"></i> Connect and share with your community 🌍</li>
+                <li class="mb-3"><i class="bi bi-check2-circle text-success"></i> Reduce food waste and make a positive impact 🥦🌽</li>
+                <li class="mb-3"><i class="bi bi-check2-circle text-success"></i> Trade or offer expiring food items 🔄🍕</li>
+                <li><i class="bi bi-check2-circle text-success"></i> Foster unity through a shared goal 🤝❤️</li>
+            </ul>
+        </div>
+    </div>
+</section>
+</main>
+
+<div th:replace="fragments/footer.html :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>
