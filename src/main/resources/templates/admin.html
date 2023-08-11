@@ -4,11 +4,26 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link type="text/css" href="css/footer.css" rel="stylesheet">
-    <link type="text/css" href="css/user-profile.css" rel="stylesheet">
+<!--    <link type="text/css" href="css/user-profile.css" rel="stylesheet">-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <title>Admin Panel</title>
 </head>
+<style>
+    body {
+        background-image: url('https://c1.wallpaperflare.com/path/266/503/613/dining-entertaining-lifestyle-kitchen-a98190f10cf02f48df40f69c5e8c8c97.jpg');
+        background-size: cover; /* This will adjust the width and height to cover the entire container */
+        background-repeat: no-repeat; /* Prevent the background image from repeating */
+        background-attachment: fixed; /* Keep the background image fixed while scrolling */
+    }
+
+    main {
+    margin-top: 100px;
+    margin-bottom: 200px;
+    }
+</style>
+
 <body>
+<main>
 <div th:replace="fragments/nav-header-authorized"></div>
 <h1>Admin Panel</h1>
 <section class="container-fluid">
@@ -32,6 +47,7 @@
     </div>
 </section>
 <div th:replace="~{fragments/footer.html :: footer}"></div>
+</main>
 </body>
 </html>
 
