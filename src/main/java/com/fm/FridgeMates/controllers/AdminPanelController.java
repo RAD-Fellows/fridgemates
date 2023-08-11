@@ -53,7 +53,6 @@ public class AdminPanelController {
             String username = user.getUsername();
 
             if (loggedInUsername.equals(username) && !username.equals("Admin") && !username.equals("Admin1")) {
-                // Allow users to delete their own profile (except Admin and Admin1)
                 applicationUserRepository.delete(user);
             }
         }

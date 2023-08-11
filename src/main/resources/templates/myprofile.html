@@ -91,7 +91,6 @@
                     <td th:text="${user.firstName}">First Name</td>
                     <td th:text="${user.lastName}">Last Name</td>
                     <td>
-
                         <a th:href="@{/view-user/{id}(id=${user.id})}" class="btn btn-primary">View</a>
                         <a th:href="@{/delete}" class="btn btn-danger">Delete</a>
                     </td>
