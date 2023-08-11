@@ -1,6 +1,7 @@
 package com.fm.FridgeMates.controllers;
 
 import com.fm.FridgeMates.models.ApplicationUser;
+import com.fm.FridgeMates.models.Refrigerator;
 import com.fm.FridgeMates.repositories.ApplicationUserRepository;
 import com.fm.FridgeMates.repositories.RefrigeratorRepository;
 import com.fm.FridgeMates.repositories.IngredientRepository;
@@ -39,23 +40,26 @@ public class AdminPanelController {
         return "admin";
     }
 
-//    @GetMapping("/myprofile/{id}")
-//    public RedirectView viewUserInfo(Model m, Principal p, @PathVariable Long id, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip){
-//        if(p != null){
-//
-//            ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
-//            browsingUser.setFirstName(firstName);
-//            browsingUser.setLastName(lastName);
-//            browsingUser.setDateOfBirth(dateOfBirth);
-//            browsingUser.setAddress(address);
-//            browsingUser.setCity(city);
-//            browsingUser.setState(state);
-//            browsingUser.setZip(zip);
-//            applicationUserRepository.save(browsingUser);
-//            m.addAttribute("browsingUser", browsingUser);
-//        }
-//        return new RedirectView("/myprofile/" + browsingUser.id);
-//    }
+    @GetMapping("/view-user/{id}")
+    public String viewUser(@PathVariable Long id, Model model) {
+        Optional<ApplicationUser> user = applicationUserRepository.findById(id);
+        if (user.isPresent()) {
+            model.addAttribute("viewedUser", user.get());
+            return "view-user";
+        }
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/myprofile/{id}")
+    public String viewUserInfo(Model m, Principal p, @PathVariable Long id, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip){
+        if(p != null){
+            ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
+            Refrigerator userRefrigerator = browsingUser.getRefrigerator();
+            m.addAttribute("browsingUser", browsingUser);
+            m.addAttribute("browsingUserRefrigerator", userRefrigerator);
+        }
+        return "user-profile.html";
+    }
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long userId) {
         Optional<ApplicationUser> userToDelete = applicationUserRepository.findById(userId);
