@@ -202,11 +202,16 @@
   font-family: Arial, sans-serif;
 }
 
+.btn-div{
+display: flex;
+}
+
 .table {
     width: 100%;
     margin-bottom: 1rem;
     color: #212529;
     border-collapse: collapse;
+    margin-left: 10%;
 }
 
 .table th, .table td {
@@ -334,6 +339,7 @@
                                 </span>
                                         <strong class="text-success">[[${comment.commentCreator.username}]]</strong>
                                         <p>[[${comment.body}]]</p>
+                                        <div class="btn-div">
                                         <button id="btn-reply" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#postReplyModal"
                                                 th:attr="data-comment-parent-id=${comment.id}"
@@ -345,6 +351,7 @@
                                             <input type="hidden" name="_method" value="delete"/>
                                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                         </form>
+                                        </div>
                                         <!-- Accordion for Replies -->
                                         <div class="accordion" th:id="'repliesAccordion' + ${commentStat.index}">
                                             <div class="accordion-item">
