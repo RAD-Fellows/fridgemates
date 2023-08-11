@@ -7,6 +7,10 @@ body {
     height: 100%;
 }
 
+main {
+margin-bottom: 150px;
+}
+
 .container {
 background: linear-gradient(to bottom, #007bff, #00aaff);
 }
