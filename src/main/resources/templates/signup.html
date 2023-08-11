@@ -162,7 +162,7 @@ main {
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="inputDateOfBirth" class="form-label">Date of Birth</label>
-                <input type="date" class="form-control" id="inputDateOfBirth" name="dateOfBirth">
+                <input type="date" class="form-control" id="inputDateOfBirth" name="dateOfBirth" required>
               </div>
             </div>
             <!-- Address -->
@@ -176,7 +176,7 @@ main {
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity" name="city">
+                <input type="text" class="form-control" id="inputCity" name="city" required>
               </div>
             </div>
             <!-- State -->
@@ -200,21 +200,21 @@ main {
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="inputUserName" class="form-label">User Name</label>
-                <input type="text" class="form-control" id="inputUserName" name="username">
+                <input type="text" class="form-control" id="inputUserName" name="username" required>
               </div>
             </div>
             <!-- Password -->
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="inputPassword" name="password">
+                <input type="password" class="form-control" id="inputPassword" name="password" required>
                 <input type="hidden" id="selectedAvatar" name="imgUrl" value="">
               </div>
             </div>
             <!-- Submit Button -->
             <div class="col-12">
               <div class="text-right">
-                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <button type="submit" class="btn btn-primary" id="signupButton">Sign Up</button>
               </div>
             </div>
           </form>
@@ -230,6 +230,28 @@ main {
 
 </body>
 <script>
+    // Add event listener to the submit button
+    document.getElementById("signupButton").addEventListener("click", function(event) {
+        // Find all radio buttons with the name "avatar"
+        const avatarRadios = document.querySelectorAll("input[name='avatar']");
+
+        // Check if at least one avatar is selected
+        let avatarSelected = false;
+        for (const radio of avatarRadios) {
+            if (radio.checked) {
+                avatarSelected = true;
+                break;
+            }
+        }
+
+        // If no avatar is selected, prevent form submission and show an alert
+        if (!avatarSelected) {
+            event.preventDefault();
+            alert("Please select an avatar.");
+        }
+    });
+</script>
+<script>
   document.addEventListener("DOMContentLoaded", function () {
     const avatarButtons = document.querySelectorAll(".avatar-btn");
     const selectedAvatarInput = document.getElementById("selectedAvatar");
@@ -242,5 +264,6 @@ main {
     });
 });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </html>
