@@ -13,7 +13,7 @@
 <h1>Admin Panel</h1>
 <section class="container-fluid">
     <div class="row">
-        <div class="col-md-4" th:each="user : ${users}">
+        <div th:each="user : ${users}" class="col-md-4">
             <div class="card mb-3" style="width: 18rem;">
                 <img th:src="${user.imgUrl}" class="card-img-top" alt="User Avatar">
                 <div class="card-body">
@@ -31,7 +31,7 @@
         </div>
     </div>
 </section>
-<div th:replace="fragments/footer.html :: footer"></div>
+<div th:replace="~{fragments/footer.html :: footer}"></div>
 </body>
 </html>
 

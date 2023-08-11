@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,9 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link type="text/css" href="css/footer.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <link type="text/css" href="css/user-profile.css" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <link th:href="@{/css/user-profile.css}" rel="stylesheet">
     <title>My Profile</title>
 </head>
 <body>
@@ -37,18 +37,16 @@
                         <li th:text="'Zip Code: ' + ${browsingUser.zip}" class="list-group-item">ZIP</li>
                     </ul>
                 </div>
-                <!-- Button trigger modal -->
+
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal">
                     Edit My Information
                 </button>
             </div>
 
-            <!-- Add Delete Button for Admin -->
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                 Delete User
             </button>
 
-            <!-- Modal for Delete User -->
             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog">
@@ -73,7 +71,7 @@
 
         </div>
         <div class="table-container">
-            <!-- Table of User Data -->
+
             <h3>All Users</h3>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -86,14 +84,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Loop through users and display their data -->
+
                 <tr th:each="user : ${users}">
                     <td th:text="${user.id}">ID</td>
                     <td th:text="${user.username}">Username</td>
                     <td th:text="${user.firstName}">First Name</td>
                     <td th:text="${user.lastName}">Last Name</td>
                     <td>
-                        <!-- Add View and Delete Buttons -->
+
                         <a th:href="@{/view-user/{id}(id=${user.id})}" class="btn btn-primary">View</a>
                         <a th:href="@{/delete}" class="btn btn-danger">Delete</a>
                     </td>
