@@ -34,7 +34,7 @@
                     <a href="/myprofile" class="nav-link">My Profile</a>
                 </li>
                 <li class="nav-item active">
-                    <a th:href="'/refrigerator/' + ${browsingUser.id}" class="nav-link">My Refrigerator</a>
+                    <a th:href="'/refrigerator/' + ${browsingUser?.id}" class="nav-link">My Refrigerator</a>
                 </li>
                 <li class="nav-item active">
                     <a href="/users" class="nav-link">User Search</a>

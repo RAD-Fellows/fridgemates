@@ -34,15 +34,6 @@ public class AdminPanelController {
         return "admin";
     }
 
-//    @GetMapping("/view-user/{id}")
-//    public String viewUser(@PathVariable Long id, Model model) {
-//        Optional<ApplicationUser> user = applicationUserRepository.findById(id);
-//        if (user.isPresent()) {
-//            model.addAttribute("viewedUser", user.get());
-//            return "view-user";
-//        }
-//        return "redirect:/admin";
-//    }
 
     @GetMapping("/myprofile/{id}")
     public String viewUserInfo(Model model, @PathVariable Long id) {
@@ -54,18 +45,22 @@ public class AdminPanelController {
     }
 
     @PostMapping("/delete")
-    public String deleteUser(@RequestParam Long userId) {
+    public String deleteUser(@RequestParam Long userId, Principal principal) {
         Optional<ApplicationUser> userToDelete = applicationUserRepository.findById(userId);
         if (userToDelete.isPresent()) {
             ApplicationUser user = userToDelete.get();
-            if (!user.getUsername().equals("Admin1")) {
+            String loggedInUsername = principal.getName();
+            String username = user.getUsername();
+
+            if (loggedInUsername.equals(username) && !username.equals("Admin") && !username.equals("Admin1")) {
+                // Allow users to delete their own profile (except Admin and Admin1)
                 applicationUserRepository.delete(user);
             }
         }
         return "redirect:/admin";
     }
 
-    @PostMapping("/update-profile/{id}") // Changed mapping to avoid conflicts
+    @PostMapping("/update-profile/{id}")
     public String updateUserProfile(@PathVariable Long id,
                                     @RequestParam String firstName,
                                     @RequestParam String lastName,
