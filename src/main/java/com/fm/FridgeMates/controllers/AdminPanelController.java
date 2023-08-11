@@ -1,6 +1,7 @@
 package com.fm.FridgeMates.controllers;
 
 import com.fm.FridgeMates.models.ApplicationUser;
+import com.fm.FridgeMates.models.Refrigerator;
 import com.fm.FridgeMates.repositories.ApplicationUserRepository;
 import com.fm.FridgeMates.repositories.RefrigeratorRepository;
 import com.fm.FridgeMates.repositories.IngredientRepository;
@@ -19,17 +20,11 @@ import java.util.List;
 public class AdminPanelController {
 
     @Autowired
-     ApplicationUserRepository applicationUserRepository;
-
-    @Autowired
-     RefrigeratorRepository refrigeratorRepository;
-
-    @Autowired
-     IngredientRepository ingredientRepository;
+    private ApplicationUserRepository applicationUserRepository;
 
     @GetMapping("/admin")
     public String adminPanel(Model model, Principal p) {
-        if (p!=null) {
+        if (p != null) {
             String username = p.getName();
             ApplicationUser browsingUser = applicationUserRepository.findByUsername(username);
             model.addAttribute("browsingUser", browsingUser);
@@ -39,23 +34,25 @@ public class AdminPanelController {
         return "admin";
     }
 
-//    @GetMapping("/myprofile/{id}")
-//    public RedirectView viewUserInfo(Model m, Principal p, @PathVariable Long id, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip){
-//        if(p != null){
-//
-//            ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
-//            browsingUser.setFirstName(firstName);
-//            browsingUser.setLastName(lastName);
-//            browsingUser.setDateOfBirth(dateOfBirth);
-//            browsingUser.setAddress(address);
-//            browsingUser.setCity(city);
-//            browsingUser.setState(state);
-//            browsingUser.setZip(zip);
-//            applicationUserRepository.save(browsingUser);
-//            m.addAttribute("browsingUser", browsingUser);
+//    @GetMapping("/view-user/{id}")
+//    public String viewUser(@PathVariable Long id, Model model) {
+//        Optional<ApplicationUser> user = applicationUserRepository.findById(id);
+//        if (user.isPresent()) {
+//            model.addAttribute("viewedUser", user.get());
+//            return "view-user";
 //        }
-//        return new RedirectView("/myprofile/" + browsingUser.id);
+//        return "redirect:/admin";
 //    }
+
+    @GetMapping("/myprofile/{id}")
+    public String viewUserInfo(Model model, @PathVariable Long id) {
+        ApplicationUser browsingUser = applicationUserRepository.findById(id).orElseThrow();
+        Refrigerator userRefrigerator = browsingUser.getRefrigerator();
+        model.addAttribute("browsingUser", browsingUser);
+        model.addAttribute("browsingUserRefrigerator", userRefrigerator);
+        return "myprofile.html";
+    }
+
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long userId) {
         Optional<ApplicationUser> userToDelete = applicationUserRepository.findById(userId);
@@ -67,4 +64,26 @@ public class AdminPanelController {
         }
         return "redirect:/admin";
     }
+
+    @PostMapping("/update-profile/{id}") // Changed mapping to avoid conflicts
+    public String updateUserProfile(@PathVariable Long id,
+                                    @RequestParam String firstName,
+                                    @RequestParam String lastName,
+                                    @RequestParam LocalDate dateOfBirth,
+                                    @RequestParam String address,
+                                    @RequestParam String city,
+                                    @RequestParam String state,
+                                    @RequestParam Integer zip) {
+        ApplicationUser userToUpdate = applicationUserRepository.findById(id).orElseThrow();
+        userToUpdate.setFirstName(firstName);
+        userToUpdate.setLastName(lastName);
+        userToUpdate.setDateOfBirth(dateOfBirth);
+        userToUpdate.setAddress(address);
+        userToUpdate.setCity(city);
+        userToUpdate.setState(state);
+        userToUpdate.setZip(zip);
+        applicationUserRepository.save(userToUpdate);
+        return "redirect:/myprofile/" + id;
+    }
 }
+

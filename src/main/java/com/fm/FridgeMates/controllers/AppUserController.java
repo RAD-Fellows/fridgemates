@@ -113,7 +113,6 @@ public class AppUserController {
         }
         return "user-profile.html";
     }
-    
 
     @PutMapping("/myprofile/{id}")
     public RedirectView editUserInfo(Model m, Principal p, @PathVariable Long id, String firstName, String lastName, LocalDate dateOfBirth, String address, String city, String state, Integer zip){
