@@ -1,6 +1,6 @@
 # Fridge Mates Application
 
-## Team Members: Aaron Clark, Rocio Martinez, Dylan Cooper
+## Team Members: Aaron Clark, Rocio Martinez, Dylan Cooper, Davey Oswald
 
 ## Project Description
 - Refrigerator social application that allows users to track what is in their refrigerator and the date it entered.  Also able to view other community members refrigerators and either message or comment.
